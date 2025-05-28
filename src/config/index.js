@@ -1,23 +1,26 @@
 /**
- * 环境配置封装
+ * 環境參數配置
  */
 const env = import.meta.env.MODE || 'prod';
 const EnvConfig = {
-    dev:{
-        baseApi:'/',
-        mockApi:'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api'
-    },
-    test:{
-        baseApi:'//test.futurefe.com/api',
-        mockApi:'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api'
-    },
-    prod:{
-        baseApi:'//futurefe.com/api',
-        mockApi:'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api'
-    }
-}
+	dev: {
+		baseApi: '/',
+		mockApi:
+			'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api',
+	},
+	test: {
+		baseApi: '//test.xxx.com/api',
+		mockApi:
+			'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api',
+	},
+	prod: {
+		baseApi: '//xxx.com/api',
+		mockApi:
+			'https://www.fastmock.site/mock/c1c302e8baed9894c48c17e4738c092e/api',
+	},
+};
 export default {
-    env,
-    mock:true,
-    ...EnvConfig[env]
-}
+	env,
+	mock: true,
+	...EnvConfig[env],
+};

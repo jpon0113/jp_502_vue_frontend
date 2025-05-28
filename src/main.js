@@ -1,13 +1,14 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from './router'
-import ElementPlus from 'element-plus'
+import { createApp } from 'vue';
+import ElementPlus from 'element-plus';
 import 'element-plus/lib/theme-chalk/index.css';
-import axios from 'axios'
-import config from './config'
-console.log("环境变量=>",import.meta.env)
+import App from './App.vue';
+import router from './router';
+import request from './utils/request';
+// import axios from 'axios';
+// import config from './config';
+
+console.log('環境變量=>', import.meta.env);
+
 const app = createApp(App);
-axios.get(config.mockApi + '/login').then((res)=>{
-    console.log(res)
-})
-app.use(router).use(ElementPlus).mount('#app')
+app.config.globalProperties.$request = request;
+app.use(router).use(ElementPlus).mount('#app');
