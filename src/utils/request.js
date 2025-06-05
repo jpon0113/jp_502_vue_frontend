@@ -1,6 +1,3 @@
-/**
- * axios 封裝
- */
 import axios from 'axios';
 import config from './../config';
 import { ElMessage } from 'element-plus';
@@ -19,13 +16,14 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
 	// TO-DO
 	const headers = req.headers;
-	if (!headers.Authorization) headers.Authorization = 'Bear Jack';
+	if (!headers.Authorization) headers.Authorization = 'Bear JPON';
 	return req;
 });
 
 // 回覆攔截
 service.interceptors.response.use((res) => {
 	const { code, data, msg } = res.data;
+
 	if (code === 200) {
 		return data;
 	} else if (code === 40001) {
@@ -39,10 +37,7 @@ service.interceptors.response.use((res) => {
 		return Promise.reject(msg || NETWORK_ERROR);
 	}
 });
-/**
- * 請求核心函數
- * @param {*} options
- */
+
 function request(options) {
 	options.method = options.method || 'get';
 	if (options.method.toLowerCase() === 'get') {
