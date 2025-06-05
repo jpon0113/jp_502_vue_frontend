@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Home from './../components/Home.vue';
+import Home from '@/components/Home.vue';
 
 const routes = [
 	{
@@ -15,9 +15,27 @@ const routes = [
 				name: 'welcome',
 				path: '/welcome',
 				meta: {
-					title: '歡迎頁',
+					title: '歡迎頁面',
 				},
-				component: () => import('./../views/Welcome.vue'),
+				component: () => import('@/views/Welcome.vue'),
+			},
+			{
+				name: 'user',
+				path: 'user',
+				meta: {
+					title: '使用者管理',
+				},
+				component: () => import('@/views/Welcome.vue'),
+				children: [
+					{
+						name: 'info',
+						path: 'info',
+						meta: {
+							title: '資訊統計',
+						},
+						component: () => import('@/views/Welcome.vue'),
+					},
+				],
 			},
 		],
 	},
@@ -25,7 +43,7 @@ const routes = [
 		name: 'login',
 		path: '/login',
 		meta: {
-			title: '登入頁',
+			title: '登入',
 		},
 		component: () => import('./../views/Login.vue'),
 	},
