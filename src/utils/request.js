@@ -2,6 +2,7 @@ import axios from 'axios';
 import config from './../config';
 import { ElMessage } from 'element-plus';
 import router from './../router';
+import storage from './storage';
 
 const TOKEN_INVALID = 'Token 認證失敗, 請重新登錄';
 const NETWORK_ERROR = '網路請求異常, 請稍後再試';
@@ -16,7 +17,8 @@ const service = axios.create({
 service.interceptors.request.use((req) => {
 	// TO-DO
 	const headers = req.headers;
-	if (!headers.Authorization) headers.Authorization = 'Bear JPON';
+	const { token } = storage.getItem('userInfo');
+	if (!headers.Authorization) headers.Authorization = 'Bearer ' + token;
 	return req;
 });
 
