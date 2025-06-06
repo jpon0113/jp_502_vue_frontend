@@ -8,7 +8,7 @@ import storage from './utils/storage';
 import api from './api';
 import store from './store';
 
-console.log('環境變量=>', import.meta.env);
+// console.log('環境變量=>', import.meta.env);
 
 const app = createApp(App);
 app.config.globalProperties.$request = request;

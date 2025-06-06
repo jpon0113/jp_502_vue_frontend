@@ -25,9 +25,9 @@
 		<div class="base-table">
 			<div class="action">
 				<el-button type="primary">新增</el-button>
-				<el-button type="danger">批次刪除</el-button>
+				<el-button type="danger" @click="handlePatchDel">批次刪除</el-button>
 			</div>
-			<el-table :data="userList">
+			<el-table :data="userList" @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55" />
 				<el-table-column
 					v-for="item in columns"
@@ -35,6 +35,7 @@
 					:prop="item.prop"
 					:label="item.label"
 					:width="item.width"
+					:formatter="item.formatter || undefined"
 				>
 				</el-table-column>
 				<el-table-column label="操作" width="150">
@@ -42,7 +43,9 @@
 						<el-button @click="handleClick(scope.row)" size="mini"
 							>編輯</el-button
 						>
-						<el-button type="danger" size="mini">刪除</el-button>
+						<el-button type="danger" size="mini" @click="handleDel(scope.row)"
+							>刪除</el-button
+						>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -66,6 +69,9 @@ export default {
 		// const { ctx } = getCurrentInstance();
 		const internalInstance = getCurrentInstance();
 		const $api = internalInstance.appContext.config.globalProperties.$api;
+		const $message =
+			internalInstance.appContext.config.globalProperties.$message;
+
 		// 初始化用戶表單
 		const user = reactive({
 			state: 0,
@@ -94,10 +100,23 @@ export default {
 			{
 				label: '用戶角色',
 				prop: 'role',
+				formatter(row, column, value) {
+					return {
+						0: '管理員',
+						1: '一般用戶',
+					}[value];
+				},
 			},
 			{
 				label: '用戶狀態',
 				prop: 'state',
+				formatter(row, column, value) {
+					return {
+						1: '在職',
+						2: '離職',
+						3: '試用期',
+					}[value];
+				},
 			},
 			{
 				label: '註冊時間',
@@ -108,6 +127,8 @@ export default {
 				prop: 'lastLoginTime',
 			},
 		]);
+		// 選中用戶的對象
+		const checkedUserIds = ref([]);
 		let formRef = ref(null);
 		onMounted(() => {
 			getUserList();
@@ -135,6 +156,40 @@ export default {
 			pager.pageNum = current;
 			getUserList();
 		};
+		// 用戶單一刪除
+		const handleDel = async (row) => {
+			await $api.userDel({
+				userIds: [row.userId],
+			});
+			$message.success('刪除成功');
+			getUserList();
+		};
+		// 批次删除
+		const handlePatchDel = async () => {
+			console.log('checkedUserIds', checkedUserIds);
+			if (checkedUserIds.value.length == 0) {
+				$message.error('請選擇要刪除的用戶');
+				return;
+			}
+			const res = await $api.userDel({
+				userIds: checkedUserIds.value,
+			});
+			if (res.nModified > 0) {
+				$message.success('刪除成功');
+				getUserList();
+			} else {
+				$message.success('刪除失敗');
+			}
+		};
+		// 表格多選
+		const handleSelectionChange = (list) => {
+			let arr = [];
+			list.map((item) => {
+				arr.push(item.userId);
+			});
+			checkedUserIds.value = arr;
+		};
+
 		return {
 			user,
 			userList,
@@ -145,6 +200,9 @@ export default {
 			handleQuery,
 			handleReset,
 			handleCurrentChange,
+			handleDel,
+			handlePatchDel,
+			handleSelectionChange,
 		};
 	},
 };

@@ -32,4 +32,12 @@ export default {
 			// mock: true,
 		});
 	},
+	userDel(params) {
+		return request({
+			url: '/users/delete',
+			method: 'post',
+			data: params,
+			// mock:true
+		});
+	},
 };
